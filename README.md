@@ -1,11 +1,9 @@
 # Simple Reinforcement Learning Algorithm implementation
 
----
 This is simple implementation for reinforcement learning algorithms for study and understanding of the baselines.
 
 ## Requirements
 
----
 
 ### required
 - python 3 (3.8 or 3.9 recommended)
@@ -17,8 +15,6 @@ This is simple implementation for reinforcement learning algorithms for study an
 
 # Implemented Algorithms
 
----
-
 
 | Type       | Algorithms     | Papers                                     | Note                     |
 |------------|----------------|--------------------------------------------|--------------------------|
@@ -26,8 +22,6 @@ This is simple implementation for reinforcement learning algorithms for study an
                                                                                                           
 
 # Usage
-
----
 
 You can simply run each algorithm by running corresponding python file.
 
