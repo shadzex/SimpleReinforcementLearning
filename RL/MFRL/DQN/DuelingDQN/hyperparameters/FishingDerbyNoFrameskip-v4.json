@@ -1,0 +1,22 @@
+{
+  "q": {"layers": [["conv2d", [16, 8, 4, 0, "relu"]], ["conv2d", [32, 4, 2, 0, "relu"]], ["flatten", []], ["linear", [256, "relu"]]]},
+
+  "optimizer": {"optimizer": ["Adam", {"learning_rate": 0.001}], "lr_scheduler": ["Empty", {}]},
+
+  "discount_factor": 0.99,
+
+  "epsilon": 1.0,
+  "epsilon_min": 0.1,
+  "epsilon_decay": 0.0000009,
+  "epsilon_decay_rate": 1,
+
+  "buffer_size": 1000000,
+  "batch_size": 32,
+
+  "normalize_state": false,
+  "normalization_method": "normalization",
+  "normalize_reward": false,
+  "reward_scale": 1.0,
+  "target_update_rate": 1,
+  "tau": 0.01
+}
