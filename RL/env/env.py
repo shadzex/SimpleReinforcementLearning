@@ -20,7 +20,7 @@ class Environment:
 
         self.seed = seed
 
-        self.env = gym.make(name, render=render)
+        self.env = gym.make(name, render_mode='human' if render else None)
 
         self.state_dim = list(self.env.observation_space.shape)
 
