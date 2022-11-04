@@ -16,10 +16,12 @@ This is simple implementation for reinforcement learning algorithms for study an
 # Implemented Algorithms
 
 
-| Type       | Algorithms     | Papers                                     | Note                     |
-|------------|----------------|--------------------------------------------|--------------------------|
-| Model-free | Deep Q Network | [link](https://arxiv.org/abs/1312.5602)    | Discrete only            |
-                                                                                                          
+| Type       | Algorithms     | Papers                                   | Note                     |
+|------------|----------------|------------------------------------------|--------------------------|
+| Model-free | Deep Q Network | [link](https://arxiv.org/abs/1312.5602)  | Discrete only            |
+| Model-free | Double DQN     | [link](https://arxiv.org/abs/1509.06461) | Discrete only            |
+| Model-free | Dueling DQN    | [link](https://arxiv.org/abs/1511.06581) | Discrete only            |
+| Model-free | C51            | [link](https://arxiv.org/abs/1707.06887) | Discrete only            |                                                                                            
 
 # Usage
 
