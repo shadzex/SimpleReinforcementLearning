@@ -122,6 +122,44 @@ class C51(DoubleDQN):
 
         return loss
 
+    def update(self):
+        states, actions, rewards, dones, next_states = self.buffer.sample(self.batch_size)
+
+        states = self.preprocess(states)
+        next_states = self.preprocess(next_states)
+
+        self.state_normalizer.update(states)
+        states = self.state_normalizer.normalize(states)
+        next_states = self.state_normalizer.normalize(next_states)
+
+        states = torch.tensor(states, device=self.device).detach().float()
+        actions = torch.tensor(actions, device=self.device).view(-1, 1, 1).expand(-1, -1, self.support_num).detach().long()
+        rewards = torch.tensor(rewards, device=self.device).unsqueeze(1).expand(-1, self.support_num).detach().float()
+        dones = torch.tensor(dones, device=self.device).unsqueeze(1).expand(-1, self.support_num).detach().float()
+        next_states = torch.tensor(next_states, device=self.device).detach().float()
+
+        if self.normalize_reward:
+            rewards = (rewards - rewards.mean(dim=0)) / (rewards.std(dim=0) + 1e-6)
+
+        y = self.get_target(rewards, dones, next_states)
+
+        loss = self.get_loss(states, actions, y)
+
+        self.optimizer.step(loss)
+
+        if self.iteration % self.target_update_rate == 0:
+            soft_update(self.q_target, self.q, self.tau)
+
+        self.iteration += 1
+
+        train_info = {'loss': loss.item()}
+
+        hyperparameter_info = {'lr': self.optimizer.get_lr()
+                               }
+
+        return 1, train_info, hyperparameter_info
+
+
 if __name__ == '__main__':
     from runner import run
     run(C51)
