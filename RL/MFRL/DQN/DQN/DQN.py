@@ -115,6 +115,19 @@ class DQN(BaseRLAlgorithm):
 
         self.buffer.store((state, action, reward, 1. - done, next_state))
 
+    # Loss function
+    def get_target(self, rewards, dones, next_states):
+        with torch.no_grad():
+            y = self.reward_scale * rewards + self.discount_factor * dones * self.q_target(next_states).max(1)[0]
+
+        return y
+
+    def get_loss(self, states, actions, target):
+        return f.mse_loss(self.q(states).gather(1, actions), target.unsqueeze(1))
+
+    def get_other_loss(self):
+        return 0.
+
     def update(self):
         states, actions, rewards, dones, next_states = self.buffer.sample(self.batch_size)
 
@@ -134,10 +147,9 @@ class DQN(BaseRLAlgorithm):
         if self.normalize_reward:
             rewards = (rewards - rewards.mean(dim=0)) / (rewards.std(dim=0) + 1e-6)
 
-        with torch.no_grad():
-            y = self.reward_scale * rewards + self.discount_factor * dones * self.q_target(next_states).max(1)[0]
+        y = self.get_target(rewards, dones, next_states)
 
-        loss = f.mse_loss(self.q(states).gather(1, actions), y.unsqueeze(1))
+        loss = self.get_loss(states, actions, y)
 
         self.optimizer.step(loss)
 

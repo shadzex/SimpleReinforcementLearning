@@ -89,27 +89,7 @@ class C51(DoubleDQN):
 
         return action
 
-    def update(self):
-        states, actions, rewards, dones, next_states = self.buffer.sample(self.batch_size)
-
-        states = self.preprocess(states)
-        next_states = self.preprocess(next_states)
-
-        self.state_normalizer.update(states)
-        states = self.state_normalizer.normalize(states)
-        next_states = self.state_normalizer.normalize(next_states)
-
-        states = torch.tensor(states, device=self.device).detach().float()
-        actions = torch.tensor(actions, device=self.device).view(-1, 1, 1).expand(-1, -1, self.support_num).detach().long()
-        rewards = torch.tensor(rewards, device=self.device).unsqueeze(1).expand(-1, self.support_num).detach().float()
-        dones = torch.tensor(dones, device=self.device).unsqueeze(1).expand(-1, self.support_num).detach().float()
-        next_states = torch.tensor(next_states, device=self.device).detach().float()
-
-        if self.normalize_reward:
-            rewards = (rewards - rewards.mean(dim=0)) / (rewards.std(dim=0) + 1e-6)
-
-        dist = self.q(states).gather(1, actions).squeeze(1)
-
+    def get_target(self, rewards, dones, next_states):
         target_dist = self.q_target(next_states)
         target_actions = torch.argmax((target_dist * self.support.view(1, 1, -1)).sum(2), dim=1).view(-1, 1, 1).expand(-1, -1, self.support_num)
         target_dist = target_dist.gather(1, target_actions).squeeze(1)
@@ -117,6 +97,14 @@ class C51(DoubleDQN):
         z_j = self.support.unsqueeze(0).expand(self.batch_size, -1)
 
         bellman_z_j = torch.clamp(self.reward_scale * rewards + self.discount_factor * dones * z_j, self.v_min, self.v_max)
+
+        return [target_dist, bellman_z_j]
+
+    def get_loss(self, states, actions, target):
+
+        target_dist, bellman_z_j = target
+
+        dist = self.q(states).gather(1, actions).squeeze(1)
 
         b = (bellman_z_j - self.v_min) / self.delta_z
 
@@ -132,19 +120,7 @@ class C51(DoubleDQN):
 
         loss = -(m * torch.log(dist + 1e-8)).mean()
 
-        self.optimizer.step(loss)
-
-        if self.iteration % self.target_update_rate == 0:
-            soft_update(self.q_target, self.q, self.tau)
-
-        self.iteration += 1
-
-        train_info = {'loss': loss.item()}
-
-        hyperparameter_info = {'lr': self.optimizer.get_lr()
-                               }
-
-        return 1, train_info, hyperparameter_info
+        return loss
 
 if __name__ == '__main__':
     from runner import run
