@@ -1,0 +1,23 @@
+{
+  "actor": {"layers": [["linear", [64, "tanh"]], ["linear", [64, "tanh"]]]},
+  "critic": {"layers":  [["linear", [64, "tanh"]], ["linear", [64, "tanh"]]]},
+
+  "discount_factor": 0.99,
+
+  "std_init": 0.6,
+  "std_min": 0.1,
+  "std_decay": 0.05,
+  "std_decay_rate": 2500,
+
+  "actor_learning_rate": 0.001,
+  "critic_learning_rate": 0.001,
+
+  "horizon": 512,
+
+  "normalize_state": false,
+  "normalization_method": "normalization",
+  "normalize_reward": false,
+  "reward_scale": 1.0,
+  "value_coefficient": 0.5,
+  "entropy_coefficient": 0.01
+}
