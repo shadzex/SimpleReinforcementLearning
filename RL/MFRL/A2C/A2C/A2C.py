@@ -281,5 +281,5 @@ class A2C(BaseRLAlgorithm):
             self.critic.load_state_dict(checkpoint['critic'])
 
 if __name__ == '__main__':
-    from runner import run_rl
-    run_rl(A2C)
+    from runner import run
+    run(A2C)
