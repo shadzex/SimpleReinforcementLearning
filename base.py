@@ -168,9 +168,7 @@ class BaseRLAlgorithm(BaseAlgorithm):
 
         self.env = env_info.env
         self.state_dim = env_info.state_dim
-        self.state_dim.reverse()
         self.goal_dim = env_info.goal_dim
-        self.goal_dim.reverse()
         self.action_space_type = env_info.action_space_type
         self.action_num = env_info.action_num
         self.action_scale = env_info.action_scale
