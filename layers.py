@@ -19,7 +19,9 @@ class Linear(nn.Linear):
         return self.out_features
 
 class Conv2d(nn.Conv2d):
-    def __init__(self, input_dim, in_channels, out_channels, kernel_size, stride, padding, bias=True):
+    def __init__(self, input_dim, out_channels, kernel_size, stride, padding, bias=True):
+        in_channels = input_dim[0]
+
         super(Conv2d, self).__init__(in_channels,
                                      out_channels,
                                      kernel_size,
@@ -44,7 +46,9 @@ class Flatten(nn.Flatten):
         return int(np.prod(self.input_dim))
 
 class ConvTranspose2d(nn.ConvTranspose2d):
-    def __init__(self, input_dim, in_channels, out_channels, kernel_size, stride, padding, bias=True):
+    def __init__(self, input_dim, out_channels, kernel_size, stride, padding, bias=True):
+        in_channels = input_dim[0]
+
         super(ConvTranspose2d, self).__init__(in_channels,
                                               out_channels,
                                               kernel_size,
