@@ -367,5 +367,5 @@ class A3C(DistributedRunner):
             self.critic.load_state_dict(checkpoint['critic'])
 
 if __name__ == '__main__':
-    from runner import run_distributed
-    run_distributed(A3C)
+    from runner import run
+    run(A3C)

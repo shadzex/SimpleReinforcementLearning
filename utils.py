@@ -178,3 +178,36 @@ class Normalizer:
     def load(self, states):
         self.normalizer.load(states)
 
+# Random processes
+class OrnsteinUhlenbeckProcess:
+    def __init__(self, action_num):
+        self.dt = 1e-2
+        self.mu = np.zeros(action_num)
+        self.theta = 0.15
+        self.sigma = 0.2
+
+        self.reset()
+
+    def reset(self):
+        self.x_prev = np.zeros_like(self.mu)
+
+    def noise(self):
+        x = self.x_prev + self.theta * (self.mu - self.x_prev) * self.dt + self.sigma * np.sqrt(self.dt) * np.random.normal(size=self.mu.shape)
+        self.x_prev = x
+
+        return x
+
+class NormalProcess:
+    def __init__(self, action_num, num_policies, sigma_min, sigma_max):
+
+        self.action_num = action_num
+
+        self.sigmas = np.linspace(sigma_min, sigma_max, num=num_policies)
+
+        self.reset()
+
+    def reset(self):
+        self.sigma = np.random.choice(self.sigmas)
+
+    def noise(self):
+        return np.random.normal(0, self.sigma, (self.action_num,))
