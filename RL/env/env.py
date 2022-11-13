@@ -29,6 +29,7 @@ class Environment:
             self.env = AtariPreprocessing(self.env)
             self.env = FrameStack(self.env, 4)
             self.state_dim = list(self.env.observation_space.shape)
+            self.state_dim.reverse()
 
         if isinstance(self.env.action_space, Discrete):
             self.action_num = self.env.action_space.n
