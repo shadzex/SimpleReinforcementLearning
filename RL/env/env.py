@@ -2,6 +2,7 @@ import gym
 from gym.spaces import Box, Discrete
 
 from gym.wrappers.atari_preprocessing import AtariPreprocessing
+from gym.wrappers.frame_stack import FrameStack
 
 import numpy as np
 
@@ -26,6 +27,7 @@ class Environment:
 
         if len(self.state_dim) == 3 and visual_wrapping:
             self.env = AtariPreprocessing(self.env)
+            self.env = FrameStack(self.env, 4)
             self.state_dim = list(self.env.observation_space.shape)
 
         if isinstance(self.env.action_space, Discrete):
