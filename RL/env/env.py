@@ -26,6 +26,7 @@ class Environment:
 
         if len(self.state_dim) == 3 and visual_wrapping:
             self.env = AtariPreprocessing(self.env)
+            self.state_dim = list(self.env.observation_space.shape)
 
         if isinstance(self.env.action_space, Discrete):
             self.action_num = self.env.action_space.n
