@@ -122,7 +122,7 @@ class C51(DoubleDQN):
 
         return loss
 
-    def update(self):
+    def sample_data(self):
         states, actions, rewards, dones, next_states = self.buffer.sample(self.batch_size)
 
         states = self.preprocess(states)
@@ -141,24 +141,7 @@ class C51(DoubleDQN):
         if self.normalize_reward:
             rewards = (rewards - rewards.mean(dim=0)) / (rewards.std(dim=0) + 1e-6)
 
-        y = self.get_target(rewards, dones, next_states)
-
-        loss = self.get_loss(states, actions, y)
-
-        self.optimizer.step(loss)
-
-        if self.iteration % self.target_update_rate == 0:
-            soft_update(self.q_target, self.q, self.tau)
-
-        self.iteration += 1
-
-        train_info = {'loss': loss.item()}
-
-        hyperparameter_info = {'lr': self.optimizer.get_lr()
-                               }
-
-        return 1, train_info, hyperparameter_info
-
+        return states, actions, rewards, dones, next_states
 
 if __name__ == '__main__':
     from runner import run

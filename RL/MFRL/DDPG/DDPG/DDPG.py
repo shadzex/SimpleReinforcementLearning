@@ -160,7 +160,7 @@ class DDPG(DQN):
 
         return critic_loss
 
-    def update(self):
+    def sample_data(self):
         states, actions, rewards, dones, next_states = self.buffer.sample(self.batch_size)
 
         states = self.preprocess(states)
@@ -178,6 +178,11 @@ class DDPG(DQN):
 
         if self.normalize_reward:
             rewards = (rewards - rewards.mean(dim=0)) / (rewards.std(dim=0) + 1e-6)
+
+        return states, actions, rewards, dones, next_states
+
+    def update(self):
+        states, actions, rewards, dones, next_states = self.sample_data()
 
         y = self.get_target(rewards, dones, next_states)
 

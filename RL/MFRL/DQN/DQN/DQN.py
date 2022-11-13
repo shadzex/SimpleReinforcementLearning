@@ -128,7 +128,7 @@ class DQN(BaseRLAlgorithm):
     def get_other_loss(self):
         return 0.
 
-    def update(self):
+    def sample_data(self):
         states, actions, rewards, dones, next_states = self.buffer.sample(self.batch_size)
 
         states = self.preprocess(states)
@@ -146,6 +146,11 @@ class DQN(BaseRLAlgorithm):
 
         if self.normalize_reward:
             rewards = (rewards - rewards.mean(dim=0)) / (rewards.std(dim=0) + 1e-6)
+
+        return states, actions, rewards, dones, next_states
+
+    def update(self):
+        states, actions, rewards, dones, next_states = self.sample_data()
 
         y = self.get_target(rewards, dones, next_states)
 
