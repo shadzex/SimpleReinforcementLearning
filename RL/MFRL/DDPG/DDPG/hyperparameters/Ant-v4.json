@@ -1,0 +1,18 @@
+{
+  "actor": {"layers": [["linear", [400, "relu"]], ["linear", [300, "relu"]]], "init":  {"tail": ["uniform ", [3e-3]]}},
+  "critic": {"action_inclusion":  1, "layers":  [["linear", [400, "relu"]], ["linear", [300, "relu"]]], "init":  {"tail": ["uniform ", [3e-3]]}},
+
+  "discount_factor": 0.99,
+
+  "actor_optimizer": {"optimizer": ["Adam", {"learning_rate": 1e-4}], "lr_scheduler": ["Empty", {}]},
+  "critic_optimizer": {"optimizer": ["Adam", {"learning_rate": 1e-3, "weight_decay": 0.01}], "lr_scheduler": ["Empty", {}]},
+
+  "buffer_size": 1000000,
+  "batch_size": 64,
+
+  "normalize_state": true,
+  "normalization_method": "normalization",
+  "normalize_reward": false,
+  "reward_scale": 1.0,
+  "tau": 0.001
+}
