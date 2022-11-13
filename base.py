@@ -227,7 +227,6 @@ class BaseRLAlgorithm(BaseAlgorithm):
     def preprocess(self, state, *args):
         # shape checks are including batch
         if np.ndim(state) == 4:
-            state = np.transpose(state, (0, 3, 2, 1))
             # Image data preprocessing
             if state.dtype == np.uint8:
                 return state / 255.
