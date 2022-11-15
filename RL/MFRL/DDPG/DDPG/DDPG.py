@@ -235,5 +235,5 @@ class DDPG(DQN):
                 self.critic_target.load_state_dict(checkpoint['critic_target'])
 
 if __name__ == '__main__':
-    from runner import run_rl
-    run_rl(DDPG)
+    from runner import run
+    run(DDPG)
