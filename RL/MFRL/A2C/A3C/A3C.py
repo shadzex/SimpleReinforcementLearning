@@ -264,7 +264,7 @@ class A3C(DistributedRunner):
                  env_info,
 
                  hyperparameters):
-        super().__init__('cpu',
+        super().__init__(device,
                          seed,
 
                          env_info,
@@ -278,8 +278,8 @@ class A3C(DistributedRunner):
 
     def build_networks_and_optimizers(self):
         # Networks
-        self.actor = Actor(self.state_dim, self.action_space_type, self.action_num, self.hyperparameters.actor)
-        self.critic = V(self.state_dim, self.hyperparameters.critic)
+        self.actor = Actor(self.state_dim, self.action_space_type, self.action_num, self.hyperparameters.actor).to(self.device)
+        self.critic = V(self.state_dim, self.hyperparameters.critic).to(self.device)
 
         self.actor.share_memory()
         self.critic.share_memory()
@@ -300,6 +300,10 @@ class A3C(DistributedRunner):
 
         return action
 
+    def change_train_mode(self, mode):
+        self.actor.train(mode)
+        self.critic.train(mode)
+
     def init(self,
              seed,
              log_path,
@@ -310,7 +314,7 @@ class A3C(DistributedRunner):
         super(A3C, self).init(seed,
                               log_path,
                               worker_num,
-                              max_iteration,
+                              worker_num * max_iteration,
                               explore_iteration,
                               render)
 
@@ -330,6 +334,7 @@ class A3C(DistributedRunner):
 
                             self.actor,
                             self.critic,
+                            self.optimizer,
 
                             render if not worker_id else False) for worker_id in range(worker_num)]
 
