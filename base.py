@@ -420,3 +420,181 @@ class BaseRLAlgorithm(BaseAlgorithm):
         self.terminate()
 
         env.close()
+
+# Classes for distributed algorithms
+
+# Worker class
+# Collect data, sometimes train by itself
+class DistributedWorker(BaseRLAlgorithm, Process):
+    def __init__(self,
+                 worker_id: int,
+
+                 # Experimental Configurations
+                 device: str,
+                 seed: int,
+
+                 # Environmental Configurations
+                 env_info,
+
+                 hyperparameters,
+
+                 score_queue: Queue,
+                 explore_iteration: int,
+
+                 render: bool = False):
+        BaseRLAlgorithm.__init__(self,
+                                 device,
+                                 seed,
+
+                                 env_info,
+
+                                 hyperparameters)
+
+        Process.__init__(self,
+                         daemon=True)
+
+        self.worker_id = worker_id
+
+        self.score_queue = score_queue
+        self.explore_iteration = explore_iteration
+
+        self.render = render
+
+    # Store data
+    def store(self, *args):
+        raise NotImplementedError
+
+    # Paste necessary parameters from the global model to the local
+    def paste(self, *args):
+        raise NotImplementedError
+
+# Logger class for distributed algorithms
+class DistributedLogger(Process):
+    def __init__(self,
+                 log_path: str,
+                 worker_num: int,
+                 max_iteration: int,
+                 score_queue: Queue,
+                 info_queue: Queue):
+        super(DistributedLogger, self).__init__(daemon=True)
+
+        self.log_path = log_path
+        self.max_iteration = max_iteration
+        self.worker_num = worker_num
+
+        self.score_queue = score_queue
+        self.info_queue = info_queue
+
+    def run(self):
+        logger = Logger(self.log_path, self.log_path, self.max_iteration, self.worker_num, 10)
+        logger.reset()
+
+        for iteration in range(self.max_iteration):
+            scores = [self.score_queue.get() for _ in range(self.score_queue.qsize())]
+
+            for score in scores:
+                logger.log_score(score)
+
+            train_info, hyperparameter_info = self.info_queue.get()
+
+            if train_info and hyperparameter_info:
+                logger.log_train(train_info)
+                logger.log_hyperparamters(hyperparameter_info)
+            logger.log()
+
+        scores = [self.score_queue.get() for _ in range(self.score_queue.qsize())]
+        for score in scores:
+            logger.log_score(score)
+
+        logger.save()
+        logger.close()
+
+# Main runner class
+# Manage processes, sometimes training is done in here
+class DistributedRunner(BaseRLAlgorithm):
+    def __init__(self,
+                 # Experimental Configurations
+                 device: str,
+                 seed: int,
+
+                 # Environmental Configurations
+                 env_info,
+
+                 hyperparameters):
+        super(DistributedRunner, self).__init__(device,
+                                                seed,
+
+                                                env_info,
+
+                                                hyperparameters)
+
+        # Set spawn for linux
+        torch.multiprocessing.set_start_method('spawn')
+
+    def reset(self, *args):
+        return
+
+    def process(self, *args):
+        return
+
+    def init_logger(self,
+                    worker_num,
+                    max_iteration):
+        self.score_queue = Queue()
+        self.info_queue = Queue()
+
+        self.logger = DistributedLogger(self.log_path, worker_num, max_iteration, self.score_queue, self.info_queue)
+
+    # initialize processes, queues, etc...
+    def init(self,
+             seed,
+             log_path,
+             worker_num,
+             max_iteration,
+             explore_iteration,
+             render,):
+        self.init_logger(worker_num, max_iteration)
+
+    # Run processes
+    def run(self,
+            env,
+            max_iteration,
+            ):
+        return
+
+    # Close used queues, processes, etc...
+    def close(self,
+              model_path):
+        self.logger.join()
+        self.logger.close()
+
+        self.score_queue.close()
+        self.info_queue.close()
+
+        self.save_models(model_path)
+
+    def train(self,
+              env: str,
+              seed: int,
+              log_path: str,
+              model_path: str,
+              evaluate_freq: int = -1,
+              worker_num: int = 1,
+              max_iteration: int = 1000000,
+              explore_iteration: int = 25000,
+              render: bool = True,
+              *args):
+
+        self.log_path = log_path
+
+        self.init(seed,
+                  log_path,
+                  worker_num,
+                  max_iteration,
+                  explore_iteration,
+                  render)
+
+        self.run(env,
+                 max_iteration)
+
+        self.close(model_path)
