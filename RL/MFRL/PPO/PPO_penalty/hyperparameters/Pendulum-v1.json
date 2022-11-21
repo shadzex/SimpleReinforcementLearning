@@ -1,0 +1,27 @@
+{
+  "actor": {"layers": [["linear", [64, "tanh"]], ["linear", [64, "tanh"]]]},
+  "critic": {"layers":  [["linear", [64, "tanh"]], ["linear", [64, "tanh"]]]},
+
+  "discount_factor": 0.99,
+
+  "std_init": 0.6,
+  "std_min": 0.1,
+  "std_decay": 0.05,
+  "std_decay_rate": 250000,
+
+  "optimizer": {"optimizer": ["Adam", {"learning_rate": [0.0003, 0.001]}], "lr_scheduler": ["Empty", {}]},
+
+  "horizon": 4000,
+
+  "normalize_state": false,
+  "normalization_method": "normalization",
+  "normalize_reward": true,
+  "reward_scale": 1.0,
+  "gae_lambda": 1.0,
+  "beta": 0.2,
+  "d_target": 0.001,
+  "mini_batch_num": 1,
+  "update_epochs": 80,
+  "value_coefficient": 0.5,
+  "entropy_coefficient": 0.01
+}
