@@ -16,22 +16,24 @@ This is simple implementation for reinforcement learning algorithms for study an
 # Implemented Algorithms
 
 
-| Type       | Algorithms      | Papers                                                                                | Note                     |
-|------------|-----------------|---------------------------------------------------------------------------------------|--------------------------|
-| Model-free | DQN             | [link](https://arxiv.org/abs/1312.5602)                                               | Discrete only            |
-| Model-free | Double DQN      | [link](https://arxiv.org/abs/1509.06461)                                              | Discrete only            |
-| Model-free | Dueling DQN     | [link](https://arxiv.org/abs/1511.06581)                                              | Discrete only            |
-| Model-free | Noisy DQN       | [link](https://arxiv.org/abs/1706.10295)                                              | Discrete only            |
-| Model-free | Prioritized DQN | [link](https://arxiv.org/abs/1511.05952)                                              | Discrete only            |
-| Model-free | C51             | [link](https://arxiv.org/abs/1707.06887)                                              | Discrete only            |                                                                                            
-| Model-free | QR-DQN          | [link](https://arxiv.org/abs/1710.10044)                                              | Discrete only            |
-| Model-free | IQN             | [link](https://arxiv.org/abs/1806.06923)                                              | Discrete only            |
-| Model-free | RAINBOW         | [link](https://arxiv.org/abs/1710.02298)                                              | Discrete only            |
-| Model-free | A2C             | [link](https://arxiv.org/abs/1602.01783)                                              | Discrete/Continuous      |
-| Model-free | A3C             | [link](https://arxiv.org/abs/1602.01783)                                              | Discrete/Continuous      |
-| Model-free | DDPG            | [link](https://arxiv.org/abs/1509.02971)                                              | Continuous only          |
- | Model-free | TD3             | [link](https://arxiv.org/abs/1802.09477)                                              | Continuous only          |
-| Model-free | SAC             | [link](https://arxiv.org/abs/1801.01290)<br/>[link](https://arxiv.org/abs/1812.05905) | Continuous only          |
+| Type       | Algorithms      | Papers                                                                                | Note                   |
+|------------|-----------------|---------------------------------------------------------------------------------------|------------------------|
+| Model-free | DQN             | [link](https://arxiv.org/abs/1312.5602)                                               | Discrete only          |
+| Model-free | Double DQN      | [link](https://arxiv.org/abs/1509.06461)                                              | Discrete only          |
+| Model-free | Dueling DQN     | [link](https://arxiv.org/abs/1511.06581)                                              | Discrete only          |
+| Model-free | Noisy DQN       | [link](https://arxiv.org/abs/1706.10295)                                              | Discrete only          |
+| Model-free | Prioritized DQN | [link](https://arxiv.org/abs/1511.05952)                                              | Discrete only          |
+| Model-free | C51             | [link](https://arxiv.org/abs/1707.06887)                                              | Discrete only          |                                                                                            
+| Model-free | QR-DQN          | [link](https://arxiv.org/abs/1710.10044)                                              | Discrete only          |
+| Model-free | IQN             | [link](https://arxiv.org/abs/1806.06923)                                              | Discrete only          |
+| Model-free | RAINBOW         | [link](https://arxiv.org/abs/1710.02298)                                              | Discrete only          |
+| Model-free | A2C             | [link](https://arxiv.org/abs/1602.01783)                                              | Discrete/Continuous    |
+| Model-free | A3C             | [link](https://arxiv.org/abs/1602.01783)                                              | Discrete/Continuous    |
+| Model-free | PPO(Clip)       | [link](https://arxiv.org/abs/1707.06347)                                              | Discrete/Continuous    |
+| Model-free | PPO(Penalty)    | [link](https://arxiv.org/abs/1707.06347)                                              | Discrete/Continuous    |
+| Model-free | DDPG            | [link](https://arxiv.org/abs/1509.02971)                                              | Continuous only        |
+ | Model-free | TD3             | [link](https://arxiv.org/abs/1802.09477)                                              | Continuous only        |
+| Model-free | SAC             | [link](https://arxiv.org/abs/1801.01290)<br/>[link](https://arxiv.org/abs/1812.05905) | Continuous only        |
 
 # Usage
 
