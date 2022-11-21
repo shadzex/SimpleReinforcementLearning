@@ -53,6 +53,16 @@ class PrioritizedDQN(DoubleDQN):
 
         self.buffer.store([priority, (state, action, reward, 1. - done, next_state)])
 
+    def get_loss(self, states, actions, target, importance_weights):
+        td_error = target.unsqueeze(1) - self.q(states).gather(1, actions)
+
+        priorities = torch.pow(torch.abs(td_error.detach()) + self.per_epsilon, self.per_alpha).squeeze(1).tolist()
+
+        loss = torch.pow(td_error, 2) * importance_weights
+        loss = loss.mean()
+
+        return loss, priorities
+
     def sample_data(self):
         states, actions, rewards, dones, next_states, indices, importance_weights = self.buffer.sample(self.batch_size)
 
@@ -74,16 +84,6 @@ class PrioritizedDQN(DoubleDQN):
             rewards = (rewards - rewards.mean(dim=0)) / (rewards.std(dim=0) + 1e-6)
 
         return states, actions, rewards, dones, next_states, indices, importance_weights
-
-    def get_loss(self, states, actions, target, importance_weights):
-        td_error = target.unsqueeze(1) - self.q(states).gather(1, actions)
-
-        priorities = torch.pow(torch.abs(td_error.detach()) + self.per_epsilon, self.per_alpha).squeeze(1).tolist()
-
-        loss = torch.pow(td_error, 2) * importance_weights
-        loss = loss.mean()
-
-        return loss, priorities
 
     def update(self):
         states, actions, rewards, dones, next_states, indices, importance_weights = self.sample_data()
