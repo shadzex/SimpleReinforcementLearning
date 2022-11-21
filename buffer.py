@@ -79,13 +79,13 @@ class PrioritizedReplayBuffer(ReplayBuffer):
             sampling_probabilities.append(probabilities[idx])
             batch.append(self.buffer[idx])
 
-        importance_sampling_weight = np.power(self.size() * sampling_probabilities, -self.beta)
-        importance_sampling_weight /= importance_sampling_weight.max()
+        importance_weights = np.power(self.size() * np.array(sampling_probabilities), -self.beta)
+        importance_weights /= importance_weights.max()
 
         batch = [np.array(e) for e in list(zip(*batch))]
 
         batch.append(indices)
-        batch.append(importance_sampling_weight)
+        batch.append(importance_weights)
 
         return batch
 
