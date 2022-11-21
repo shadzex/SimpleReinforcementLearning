@@ -1,0 +1,24 @@
+{
+  "q": {"layers": [["linear", [128, "relu"]], ["linear", [128, "relu"]]]},
+
+  "optimizer": {"optimizer": ["Adam", {"learning_rate": 0.001}], "lr_scheduler": ["Empty", {}]},
+
+  "discount_factor": 0.99,
+
+  "epsilon": 1.0,
+  "epsilon_min": 0.05,
+  "epsilon_decay": 0.01,
+  "epsilon_decay_rate": 100,
+
+  "buffer_size": 1000000,
+  "batch_size": 256,
+
+  "normalize_state": false,
+  "normalization_method": "normalization",
+  "normalize_reward": false,
+  "reward_scale": 1.0,
+  "target_update_rate": 1,
+  "tau": 0.01,
+  "quantile_num": 64,
+  "kappa": 1.0
+}
