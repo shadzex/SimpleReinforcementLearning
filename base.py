@@ -266,8 +266,8 @@ class BaseRLAlgorithm(BaseAlgorithm):
         return
 
     # If necessary, pretraining can be done
-    def pretrain(self, *args):
-        raise NotImplementedError
+    def pretrain(self, env):
+        return
 
     # A method called after each update
     def postprocess(self, *args):
@@ -343,6 +343,8 @@ class BaseRLAlgorithm(BaseAlgorithm):
         self.init(env,
                   max_iteration,
                   explore_iteration)
+
+        self.pretrain(env)
 
         score = 0.
         discounted_score = 0.
