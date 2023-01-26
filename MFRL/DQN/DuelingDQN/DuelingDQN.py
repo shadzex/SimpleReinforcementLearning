@@ -8,6 +8,7 @@ from network import GeneralNetwork
 from layers import Linear
 from optimizer import Optimizer
 
+# Dueling network
 class Q(GeneralNetwork):
     def __init__(self,
                  state_dim,
@@ -48,15 +49,7 @@ class DuelingDQN(DoubleDQN):
 
                                          hyperparameters)
 
-    def build_networks_and_optimizers(self):
-        # Networks
-        self.q = Q(self.state_dim, self.action_num, self.hyperparameters.q).to(self.device)
-        self.q_target = Q(self.state_dim, self.action_num, self.hyperparameters.q).to(self.device)
-
-        hard_update(self.q_target, self.q)
-
-        # Optimizers
-        self.optimizer = Optimizer(self.q, self.hyperparameters.optimizer)
+        self.Q = Q
 
 if __name__ == '__main__':
     from runner import run
