@@ -1,6 +1,6 @@
 # Dueling Deep Q Network
 
-from MFRL.DQN.DoubleDQN.DoubleDQN import DoubleDQN
+from MFRL.DQN.PrioritizedDQN.PrioritizedDQN import PrioritizedDQN
 
 from network import GeneralNetwork
 from layers import Linear
@@ -29,7 +29,7 @@ class Q(GeneralNetwork):
 
         return q
 
-class DuelingDQN(DoubleDQN):
+class DuelingDQN(PrioritizedDQN):
     def __init__(self,
                  # Experimental Configurations
                  device: str,

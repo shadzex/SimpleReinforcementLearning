@@ -48,12 +48,11 @@ class PrioritizedDQN(DoubleDQN):
         td = td - self.q(torch.tensor(state, device=self.device).unsqueeze(0).float()).gather(1, torch.tensor([[action]], device=self.device))
 
         # Propotional priority calculation
-        # Rank-based is not implemented yet
         priority = torch.pow(torch.abs(td) + self.per_epsilon, self.per_alpha).item()
 
         self.buffer.store([priority, (state, action, reward, 1. - done, next_state)])
 
-    def get_loss(self, states, actions, target, importance_weights):
+    def get_loss(self, states, actions, target, importance_weights, *args):
         td_error = target.unsqueeze(1) - self.q(states).gather(1, actions)
 
         priorities = torch.pow(torch.abs(td_error.detach()) + self.per_epsilon, self.per_alpha).squeeze(1).tolist()
