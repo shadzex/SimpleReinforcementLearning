@@ -51,6 +51,8 @@ class DQN(BaseRLAlgorithm):
 
                                   hyperparameters)
 
+        self.Q = Q
+
         # Hyperparameters
         self.epsilon = hyperparameters.epsilon
         self.epsilon_min = hyperparameters.epsilon_min
@@ -74,8 +76,8 @@ class DQN(BaseRLAlgorithm):
 
     def build_networks_and_optimizers(self):
         # Networks
-        self.q = Q(self.state_dim, self.action_num, self.hyperparameters.q).to(self.device)
-        self.q_target = Q(self.state_dim, self.action_num, self.hyperparameters.q).to(self.device)
+        self.q = self.Q(self.state_dim, self.action_num, self.hyperparameters.q).to(self.device)
+        self.q_target = self.Q(self.state_dim, self.action_num, self.hyperparameters.q).to(self.device)
 
         hard_update(self.q_target, self.q)
 
