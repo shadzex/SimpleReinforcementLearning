@@ -1,5 +1,5 @@
 # Common train or test functions
-import importlib
+
 from os.path import isdir
 from os import makedirs, listdir
 
@@ -7,14 +7,12 @@ from viewer import Viewer
 
 import argparse
 
-from base import BaseRLAlgorithm, DistributedRunner, Hyperparameters
+from base import DistributedRunner, Hyperparameters
 from RL.env.env import Environment
 
-from logger import Logger
+from datetime import datetime
 
 import torch
-
-import re
 
 class EnvironmentInfo:
     def __init__(self):
@@ -52,7 +50,17 @@ def get_env_info(env_name):
 
     return env_info
 
+def path_check(path):
+    if not isdir(path):
+        try:
+            makedirs(path)
+        except FileNotFoundError:
+            print('Failed to create directory')
+            exit()
+
 def default_setting(base_path, name, version):
+    now = datetime.now().strftime('%Y%m%d_%Hh%Mm%Ss')
+
     if torch.cuda.is_available():
         device = 'cuda:0'
     else:
@@ -64,32 +72,25 @@ def default_setting(base_path, name, version):
     base_model_path = base_path + '/models/{}'.format(name)
     base_log_path = base_path + '/logs/{}'.format(name)
 
-    if not isdir(base_model_path):
-        try:
-            makedirs(base_model_path)
-        except:
-            print('폴더 생성 실패')
-            exit()
+    path_check(base_model_path)
+    path_check(base_log_path)
 
-    if not isdir(base_log_path):
-        try:
-            makedirs(base_log_path)
-        except:
-            print('폴더 생성 실패')
-            exit()
-
+    file_names = [file_name for file_name in listdir(base_model_path) if file_name[-1].isdecimal()]
+    numberings = [int(file_name[-1]) for file_name in file_names]
     if version == -1:
-        dir_list = list({int(re.sub(r'_\D*', '', file_name)) for file_name in listdir(base_model_path)})
-        if len(dir_list) == 0:
-            numbering = 0
-        else:
-            dir_list.sort()
-            numbering = dir_list[-1] + 1
+        # Create new numbering for new model
+        numbering = len(file_names)
+        file_name = '/{}_version_{}'.format(now, numbering)
     else:
-        numbering = version
+        # Find existing numbering or create new one
+        try:
+            file_name = file_names[numberings.index(version)]
+            print(file_name)
+        except ValueError:
+            file_name = '/{}_version_{}'.format(now, version)
 
-    model_path = base_model_path + '/{}'.format(numbering)
-    log_path = base_log_path + '/{}'.format(numbering)
+    model_path = base_model_path + file_name
+    log_path = base_log_path + file_name
 
     return device, hyperparameters, model_path, log_path
 
