@@ -121,7 +121,6 @@ def run(algorithm_class):
 
     train = args.train
     view = args.view
-    best = args.best
     test = args.test
 
     env = args.env
