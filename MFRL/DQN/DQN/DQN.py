@@ -51,9 +51,11 @@ class DQN(BaseRLAlgorithm):
 
                                   hyperparameters)
 
-        self.Q = Q
+        self.init_hyperparameters(hyperparameters)
 
-        # Hyperparameters
+        self.build()
+
+    def init_hyperparameters(self, hyperparameters):
         self.epsilon = hyperparameters.epsilon
         self.epsilon_min = hyperparameters.epsilon_min
         self.epsilon_decay = hyperparameters.epsilon_decay
@@ -69,7 +71,7 @@ class DQN(BaseRLAlgorithm):
         self.target_update_rate = hyperparameters.target_update_rate
         self.tau = hyperparameters.tau
 
-        self.build()
+        self.Q = Q
 
     def build_memories(self):
         self.buffer = ReplayBuffer(self.buffer_size)

@@ -5,7 +5,7 @@ from MFRL.DQN.DoubleDQN.DoubleDQN import DoubleDQN
 from network import GeneralNetwork
 from layers import Linear
 
-# Dueling network
+# Dueling architecture
 class Q(GeneralNetwork):
     def __init__(self,
                  state_dim,
@@ -45,6 +45,9 @@ class DuelingDQN(DoubleDQN):
                                          env_info,
 
                                          hyperparameters)
+
+    def init_hyperparameters(self, hyperparameters):
+        super(DuelingDQN, self).init_hyperparameters(hyperparameters)
 
         self.Q = Q
 

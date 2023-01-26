@@ -88,9 +88,13 @@ class BaseAlgorithm:
         # Set hyperparameters
         self.hyperparameters = hyperparameters
 
+    # Initialize hyperparameters
+    def init_hyperparameters(self, hyperparameters):
+        raise NotImplementedError
+
     # Builders
     # Builder methods are for initializing networks, losses, optimizers, memories, and normalizers
-    # Builders must be called inside the init method
+    # Builders must be called inside the __init__ method
 
     # Build
     def build(self):
@@ -207,11 +211,11 @@ class BaseRLAlgorithm(BaseAlgorithm):
 
     # A method for initializing before the training begins
     # Mostly not necessary
-    def init(self,
-             env,
-             max_iteration,
-             explore_iteration,
-             *args):
+    def init_train(self,
+                   env,
+                   max_iteration,
+                   explore_iteration,
+                   *args):
         self.reward_function = env.reward_function
         self.explore_iteration = explore_iteration
 
@@ -330,9 +334,9 @@ class BaseRLAlgorithm(BaseAlgorithm):
 
         env = Environment(env, seed, render=render)
 
-        self.init(env,
-                  max_iteration,
-                  explore_iteration)
+        self.init_train(env,
+                        max_iteration,
+                        explore_iteration)
 
         self.pretrain(env)
 
