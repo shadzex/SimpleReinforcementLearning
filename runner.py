@@ -35,7 +35,7 @@ class EnvironmentInfo:
         return info
 
 def get_env_info(env_name):
-    env = Environment(env_name)
+    env = Environment(env_name, render=False)
 
     env_info = EnvironmentInfo()
 
