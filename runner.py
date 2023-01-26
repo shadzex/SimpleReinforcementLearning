@@ -98,7 +98,7 @@ def run(algorithm_class):
     parser = argparse.ArgumentParser(description='Input Argument')
 
     # Arguments
-    parser.add_argument('-e', '--env', type=str, default='Pendulum-v0') # Environment
+    parser.add_argument('-e', '--env', type=str, default='CartPole-v1') # Environment
     parser.add_argument('-s', '--seed', type=int, default=0) # Seed
     parser.add_argument('-v', '--version', type=int, default=-1) # Model version
     parser.add_argument('-f', '--evaluate_freq', type=int, default=-1) # Save/evaluation frequency
