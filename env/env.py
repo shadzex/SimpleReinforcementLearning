@@ -1,3 +1,5 @@
+# Wrapper class for environments
+
 import gym
 from gym.spaces import Box, Discrete
 
@@ -9,7 +11,6 @@ import numpy as np
 def get_all_envs():
     return gym.envs.registry.all()
 
-# Wrapper class for environments
 class Environment:
     def __init__(self, name, seed=None, action_repeat=1, visual_wrapping=True, render=True):
 
@@ -25,11 +26,13 @@ class Environment:
 
         self.state_dim = list(self.env.observation_space.shape)
 
+        # Visual preprocessing for atari environments
         if len(self.state_dim) == 3 and visual_wrapping:
             self.env = AtariPreprocessing(self.env)
             self.env = FrameStack(self.env, 4)
             self.state_dim = list(self.env.observation_space.shape)
 
+        # Environment information specification
         if isinstance(self.env.action_space, Discrete):
             self.action_num = self.env.action_space.n
             self.action_space_type = 'discrete'
@@ -45,6 +48,7 @@ class Environment:
             self.action_scale = float((self.action_upper_bound - self.action_lower_bound) / 2.)
             self.action_bias = float((self.action_upper_bound + self.action_lower_bound) / 2.)
 
+        # Try to extract desired goals for environments
         try:
             self.goal_dim = list(self.env.goal_space.shape)
         except:
