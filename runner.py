@@ -84,8 +84,7 @@ def default_setting(base_path, name, version):
     else:
         # Find existing numbering or create new one
         try:
-            file_name = file_names[numberings.index(version)]
-            print(file_name)
+            file_name = '/' + file_names[numberings.index(version)]
         except ValueError:
             file_name = '/{}_version_{}'.format(now, version)
 
