@@ -1,7 +1,6 @@
 # Deep Q Network
 
 import torch
-import torch.nn.functional as f
 
 from os.path import isfile
 
@@ -11,9 +10,11 @@ from network import GeneralNetwork
 from layers import Linear
 from optimizer import Optimizer
 from utils import hard_update, soft_update
+from loss import MSE
 
 import random
 
+# Neural network definition for Q function
 class Q(GeneralNetwork):
     def __init__(self,
                  state_dim,
@@ -81,6 +82,9 @@ class DQN(BaseRLAlgorithm):
         # Optimizers
         self.optimizer = Optimizer(self.q, self.hyperparameters.optimizer)
 
+    def build_losses(self):
+        self.loss = MSE()
+
     def reset(self):
         return
 
@@ -117,13 +121,15 @@ class DQN(BaseRLAlgorithm):
 
     # Loss function
     def get_target(self, rewards, dones, next_states):
+        # Bellman target
+        # r + γ * max_a0(Q(s',a';θi−1))
         with torch.no_grad():
             y = self.reward_scale * rewards + self.discount_factor * dones * self.q_target(next_states).max(1)[0]
 
         return y
 
     def get_loss(self, states, actions, target):
-        return f.mse_loss(self.q(states).gather(1, actions), target.unsqueeze(1))
+        return self.loss(self.q(states).gather(1, actions), target.unsqueeze(1))
 
     def get_other_loss(self):
         return 0.
