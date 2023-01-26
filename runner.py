@@ -8,7 +8,7 @@ from viewer import Viewer
 import argparse
 
 from base import DistributedRunner, Hyperparameters
-from RL.env.env import Environment
+from env.env import Environment
 
 from datetime import datetime
 

@@ -7,7 +7,7 @@ from utils import Normalizer
 
 import json
 
-from RL.env.env import Environment
+from env.env import Environment
 
 from logger import Logger
 
