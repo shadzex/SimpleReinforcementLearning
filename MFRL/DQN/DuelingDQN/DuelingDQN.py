@@ -1,12 +1,9 @@
 # Dueling Deep Q Network
 
-from utils import hard_update
-
 from MFRL.DQN.DoubleDQN.DoubleDQN import DoubleDQN
 
 from network import GeneralNetwork
 from layers import Linear
-from optimizer import Optimizer
 
 # Dueling network
 class Q(GeneralNetwork):
