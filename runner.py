@@ -107,7 +107,6 @@ def run(algorithm_class):
     parser.add_argument('-x', '--explore_iteration', type=int, default=0) # First some iterations can be used for random exploration with random action
     parser.add_argument('--train', action='store_true') # Decide to train
     parser.add_argument('--view', action='store_true') # Decide to view the graph of the log
-    parser.add_argument('--best', action='store_true') # Decide to test with the model evaluated during training with the best score
     parser.add_argument('--test', action='store_true') # Decide to test
     parser.add_argument('--render', action='store_true') # Decide to render during training(Automatically true for the test)
 
@@ -152,8 +151,5 @@ def run(algorithm_class):
         viewer.view()
 
     if test:
-        if best:
-            algorithm.load_models(model_path + '_best')
-        else:
-            algorithm.load_models(model_path)
+        algorithm.load_models(model_path)
         algorithm.test(env)

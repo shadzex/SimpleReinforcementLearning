@@ -178,8 +178,6 @@ class BaseRLAlgorithm(BaseAlgorithm):
         # Others
         self.iteration = 0
 
-        self.best_score = -np.inf
-
     # Overrided build function
     def build(self):
         super(BaseRLAlgorithm, self).build()
@@ -287,7 +285,6 @@ class BaseRLAlgorithm(BaseAlgorithm):
                  env: Environment,
                  max_episode: int = 10,
                  print_score: bool = False):
-        scores = []
 
         for episode in range(1, max_episode + 1):
             score = 0.
@@ -310,13 +307,6 @@ class BaseRLAlgorithm(BaseAlgorithm):
 
             if print_score:
                 print('Episode {} Score: {}'.format(episode, score))
-
-            scores.append(score)
-
-        current_score = np.mean(scores)
-
-        if current_score >= self.best_score:
-            return True
 
         return False
 
@@ -390,10 +380,7 @@ class BaseRLAlgorithm(BaseAlgorithm):
                 discounted_score = 0.
 
                 if evaluate_freq > 0 and episode % evaluate_freq == 0:
-                    update_best_model = self.evaluate(env)
                     self.save_models(model_path)
-                    if update_best_model:
-                        self.save_models(model_path + '_best')
 
                 state = env.reset()
                 self.goal = env.goal

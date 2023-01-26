@@ -41,8 +41,7 @@ You can simply run each algorithm by running corresponding python file.
 
 For example, if you want to run DQN file with CartPole-v1 environment, you can just do it with following codes on the cmd window.
     
-    C:\Path to DQN.py>python DQN.py -e=CartPole-v1 -m=100000 -x=0 -f=0 -v=-1 --train --view --test --best
-
+    C:\Path to DQN.py>python DQN.py -e=CartPole-v1 -m=100000 -x=0 -f=0 -v=-1 --train --view --test
 Options for running command are as follows.
 
 | Options  | Descriptions             | Note                                                                    |
@@ -57,7 +56,6 @@ Options for running command are as follows.
 | --train  | train model              | If specified, train the model                                           |
 | --test   | test model               | If specified, test the model                                            |
 | --view   | view training graph      | If specified, view the training graph                                   |
-| --best   | test with the best model | If specified, test with the model with the best performance             |
 | --render | render during training   | Not recommended to use                                                  |
 
 
