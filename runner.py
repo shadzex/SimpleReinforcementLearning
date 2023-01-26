@@ -104,7 +104,7 @@ def run(algorithm_class):
     parser.add_argument('-f', '--evaluate_freq', type=int, default=-1) # Save/evaluation frequency
     parser.add_argument('-w', '--worker_num', type=int, default=4) # Worker number for distributed algorithms, disabled for non-distributed algorithms
     parser.add_argument('-m', '--max_iteration', type=int, default=1000000) # Max iteration for training
-    parser.add_argument('-x', '--explore_iteration', type=int, default=25000) # First some iterations can be used for random exploration with random action
+    parser.add_argument('-x', '--explore_iteration', type=int, default=0) # First some iterations can be used for random exploration with random action
     parser.add_argument('--train', action='store_true') # Decide to train
     parser.add_argument('--view', action='store_true') # Decide to view the graph of the log
     parser.add_argument('--best', action='store_true') # Decide to test with the model evaluated during training with the best score
