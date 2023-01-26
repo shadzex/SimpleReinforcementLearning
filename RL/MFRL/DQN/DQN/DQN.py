@@ -91,6 +91,7 @@ class DQN(BaseRLAlgorithm):
     def explore(self, state):
         state = self.preprocess_inputs(state, self.state_normalizer)
 
+        # Epsilon-greedy exploration
         if random.random() < self.epsilon:
             action = random.randrange(self.action_num)
         else:
@@ -120,26 +121,27 @@ class DQN(BaseRLAlgorithm):
         self.buffer.store((state, action, reward, 1. - done, next_state))
 
     # Loss function
-    def get_target(self, rewards, dones, next_states):
+    def get_target(self, rewards, dones, next_states, *args):
         # Bellman target
-        # r + γ * max_a0(Q(s',a';θi−1))
+        # y_i = r + γ * max_a0(Q(s',a';θi−1))
         with torch.no_grad():
             y = self.reward_scale * rewards + self.discount_factor * dones * self.q_target(next_states).max(1)[0]
 
         return y
 
-    def get_loss(self, states, actions, target):
+    def get_loss(self, states, actions, target, *args):
+        # Equation (2) from the original paper
         return self.loss(self.q(states).gather(1, actions), target.unsqueeze(1))
 
-    def get_other_loss(self):
-        return 0.
-
     def sample_data(self):
+        # Sampling data from the replay buffer
         states, actions, rewards, dones, next_states = self.buffer.sample(self.batch_size)
 
+        # Preprocessing
         states = self.preprocess(states)
         next_states = self.preprocess(next_states)
 
+        # If necessary, normalize states
         self.state_normalizer.update(states)
         states = self.state_normalizer.normalize(states)
         next_states = self.state_normalizer.normalize(next_states)
@@ -150,6 +152,7 @@ class DQN(BaseRLAlgorithm):
         dones = torch.tensor(dones, device=self.device).detach().float()
         next_states = torch.tensor(next_states, device=self.device).detach().float()
 
+        # If necessary, normalize rewards
         if self.normalize_reward:
             rewards = (rewards - rewards.mean(dim=0)) / (rewards.std(dim=0) + 1e-6)
 
@@ -164,6 +167,7 @@ class DQN(BaseRLAlgorithm):
 
         self.optimizer.step(loss)
 
+        # Soft target q update
         if self.iteration % self.target_update_rate == 0:
             soft_update(self.q_target, self.q, self.tau)
 
