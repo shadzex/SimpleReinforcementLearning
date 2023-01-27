@@ -140,9 +140,9 @@ def run(algorithm_class):
     if train:
         # If the algorithm is distributed,
         if isinstance(algorithm, DistributedRunner):
-            algorithm.train(env, seed, log_path, model_path, evaluate_freq, worker_num, max_iteration, explore_iteration, render=render)
+            algorithm.train(env, log_path, model_path, evaluate_freq, worker_num, max_iteration, explore_iteration, render=render)
         else:
-            algorithm.train(env, seed, log_path, model_path, evaluate_freq, max_iteration, explore_iteration, render=render)
+            algorithm.train(env, log_path, model_path, evaluate_freq, max_iteration, explore_iteration, render=render)
 
     if view:
         viewer = Viewer(log_path, 10)
