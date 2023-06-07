@@ -316,11 +316,10 @@ class BaseRLAlgorithm(BaseAlgorithm):
 
     # Actual running method
     def train(self,
-              env: str,
-              seed: int,
               log_path: str,
               model_path: str,
               evaluate_freq: int = -1,
+              worker_num: int = 1,
               max_iteration: int = 1000000,
               explore_iteration: int = 25000,
               render: bool = True,
@@ -332,7 +331,7 @@ class BaseRLAlgorithm(BaseAlgorithm):
 
         self.load_models(model_path)
 
-        env = Environment(env, seed, render=render)
+        env = Environment(self.env, self.seed, render=render)
 
         self.init_train(env,
                         max_iteration,
